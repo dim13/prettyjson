@@ -10,13 +10,11 @@ import (
 func main() {
 	var in, out bytes.Buffer
 
-	_, err := in.ReadFrom(os.Stdin)
-	if err != nil {
+	if _, err := in.ReadFrom(os.Stdin); err != nil {
 		log.Fatal(err)
 	}
 
-	err = json.Indent(&out, in.Bytes(), "", "  ")
-	if err != nil {
+	if err := json.Indent(&out, in.Bytes(), "", "  "); err != nil {
 		log.Fatal(err)
 	}
 
