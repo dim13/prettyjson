@@ -14,9 +14,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if err := json.Indent(&out, in.Bytes(), "", "  "); err != nil {
+	if err := json.Indent(&out, in.Bytes(), "", "\t"); err != nil {
 		log.Fatal(err)
 	}
 
-	out.WriteTo(os.Stdout)
+	if _, err := out.WriteTo(os.Stdout); err != nil {
+		log.Fatal(err)
+	}
 }
