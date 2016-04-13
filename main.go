@@ -3,18 +3,32 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"flag"
 	"log"
 	"os"
 )
 
-func main() {
-	var in, out bytes.Buffer
+var nspaces = flag.Int("spaces", 4, "indent")
 
+func spaces(n int) string {
+	z := make([]rune, n)
+	for i := range z {
+		z[i] = ' '
+	}
+	return string(z)
+}
+
+func main() {
+	flag.Parse()
+	indent := spaces(*nspaces)
+
+	in := bytes.Buffer{}
 	if _, err := in.ReadFrom(os.Stdin); err != nil {
 		log.Fatal(err)
 	}
 
-	if err := json.Indent(&out, in.Bytes(), "", "\t"); err != nil {
+	out := bytes.Buffer{}
+	if err := json.Indent(&out, in.Bytes(), "", indent); err != nil {
 		log.Fatal(err)
 	}
 
