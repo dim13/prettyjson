@@ -8,8 +8,6 @@ import (
 	"os"
 )
 
-var nspaces = flag.Int("spaces", 4, "indent")
-
 func spaces(n int) string {
 	z := make([]rune, n)
 	for i := range z {
@@ -19,8 +17,9 @@ func spaces(n int) string {
 }
 
 func main() {
+	var n = flag.Int("n", 2, "indent spaces")
 	flag.Parse()
-	indent := spaces(*nspaces)
+	indent := spaces(*n)
 
 	in := bytes.Buffer{}
 	if _, err := in.ReadFrom(os.Stdin); err != nil {
