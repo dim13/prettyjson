@@ -6,20 +6,13 @@ import (
 	"flag"
 	"log"
 	"os"
+	"strings"
 )
-
-func spaces(n int) string {
-	z := make([]rune, n)
-	for i := range z {
-		z[i] = ' '
-	}
-	return string(z)
-}
 
 func main() {
 	var n = flag.Int("n", 2, "indent spaces")
 	flag.Parse()
-	indent := spaces(*n)
+	indent := strings.Repeat(" ", *n)
 
 	in := bytes.Buffer{}
 	if _, err := in.ReadFrom(os.Stdin); err != nil {
