@@ -10,8 +10,9 @@ import (
 )
 
 func main() {
-	var n = flag.Int("n", 2, "indent spaces")
+	n := flag.Int("n", 2, "indent spaces")
 	flag.Parse()
+
 	indent := strings.Repeat(" ", *n)
 
 	in := bytes.Buffer{}
