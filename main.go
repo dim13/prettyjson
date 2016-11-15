@@ -11,21 +11,27 @@ import (
 
 func main() {
 	n := flag.Int("n", 2, "indent spaces")
+	c := flag.Bool("c", false, "compact output")
 	flag.Parse()
 
-	indent := strings.Repeat(" ", *n)
-
-	in := bytes.Buffer{}
-	if _, err := in.ReadFrom(os.Stdin); err != nil {
+	in := new(bytes.Buffer)
+	_, err := in.ReadFrom(os.Stdin)
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	out := bytes.Buffer{}
-	if err := json.Indent(&out, in.Bytes(), "", indent); err != nil {
+	out := new(bytes.Buffer)
+	if *c {
+		err = json.Compact(out, in.Bytes())
+	} else {
+		err = json.Indent(out, in.Bytes(), "", strings.Repeat(" ", *n))
+	}
+	if err != nil {
 		log.Fatal(err)
 	}
 
-	if _, err := out.WriteTo(os.Stdout); err != nil {
+	_, err = out.WriteTo(os.Stdout)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
