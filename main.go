@@ -9,6 +9,13 @@ import (
 	"strings"
 )
 
+func sp(n int) string {
+	if n%8 == 0 {
+		return strings.Repeat("\t", n/8)
+	}
+	return strings.Repeat(" ", n)
+}
+
 func main() {
 	n := flag.Int("n", 2, "indent spaces")
 	c := flag.Bool("c", false, "compact output")
@@ -24,7 +31,7 @@ func main() {
 	if *c {
 		err = json.Compact(out, in.Bytes())
 	} else {
-		err = json.Indent(out, in.Bytes(), "", strings.Repeat(" ", *n))
+		err = json.Indent(out, in.Bytes(), "", sp(*n))
 	}
 	if err != nil {
 		log.Fatal(err)
