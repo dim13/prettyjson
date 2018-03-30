@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"flag"
 	"log"
@@ -9,36 +8,22 @@ import (
 	"strings"
 )
 
-func spaces(n int) string {
-	if n%8 == 0 {
-		return strings.Repeat("\t", n/8)
-	}
-	return strings.Repeat(" ", n)
-}
-
 func main() {
-	n := flag.Int("n", 2, "indent spaces")
-	c := flag.Bool("c", false, "compact output")
+	indentLevel := flag.Int("n", 2, "indent level")
+	compact := flag.Bool("c", false, "compact output")
 	flag.Parse()
 
-	in := new(bytes.Buffer)
-	_, err := in.ReadFrom(os.Stdin)
-	if err != nil {
-		log.Fatal(err)
+	dec, enc := json.NewDecoder(os.Stdin), json.NewEncoder(os.Stdout)
+	if !*compact {
+		spaces := strings.Repeat(" ", *indentLevel)
+		enc.SetIndent("", spaces)
 	}
 
-	out := new(bytes.Buffer)
-	if *c {
-		err = json.Compact(out, in.Bytes())
-	} else {
-		err = json.Indent(out, in.Bytes(), "", spaces(*n))
-	}
-	if err != nil {
+	var v interface{}
+	if err := dec.Decode(&v); err != nil {
 		log.Fatal(err)
 	}
-
-	_, err = out.WriteTo(os.Stdout)
-	if err != nil {
+	if err := enc.Encode(&v); err != nil {
 		log.Fatal(err)
 	}
 }
