@@ -9,17 +9,17 @@ import (
 )
 
 func main() {
-	indentLevel := flag.Int("n", 2, "indent level")
+	indent := flag.Int("n", 2, "indent level")
 	compact := flag.Bool("c", false, "compact output")
 	flag.Parse()
 
 	dec, enc := json.NewDecoder(os.Stdin), json.NewEncoder(os.Stdout)
 	if !*compact {
-		spaces := strings.Repeat(" ", *indentLevel)
+		spaces := strings.Repeat(" ", *indent)
 		enc.SetIndent("", spaces)
 	}
 
-	var v interface{}
+	var v any
 	if err := dec.Decode(&v); err != nil {
 		log.Fatal(err)
 	}
